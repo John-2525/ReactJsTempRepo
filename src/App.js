@@ -7,18 +7,19 @@ function App() {
 	// Testing data for ThreatReport and Report .js
 
 	// Store boolean variables and function to toggle it
-	const [Page, switchingPage] = useState(true)
-	const [Hash, newHash] = useState('')
+	const [page, switchingPage] = useState(true)
+	const [hash, newHash] = useState('')
+	const [length, updateLength] = useState(0)
 
 	//Function to toggle boolean variable Page
 	function switchpage() {
-		switchingPage(!Page)
+		switchingPage(!page)
 	}
 
-	// Function to get text from search bar
+	// Function to get text from search bar and text's length
 	function getQuery(text) {
-		console.log('From App.js, hash keyed : ' + text)
 		newHash(text)
+		updateLength(text.length)
 	}
 
 	function SearchPage(props) {
@@ -26,7 +27,10 @@ function App() {
 			<>
 				<Header switchpage={props.switchpage} text={props.text} />
 				<SearchBar getQuery={props.getQuery} />
-				<ThreatReport HashData={props.HashData} />
+				<ThreatReport
+					hashData={props.hashData}
+					hashLength={props.hashLength}
+				/>
 			</>
 		)
 	}
@@ -41,15 +45,16 @@ function App() {
 
 	return (
 		<div className="App">
-			{Page && (
+			{page && (
 				<SearchPage
 					getQuery={getQuery}
 					switchpage={switchpage}
 					text="Upload Threat Report"
-					HashData={Hash}
+					hashData={hash}
+					hashLength={length}
 				/>
 			)}
-			{!Page && (
+			{!page && (
 				<UploadThreatPage
 					switchpage={switchpage}
 					text="Search Malicious Hashes"

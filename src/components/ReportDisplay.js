@@ -1,81 +1,55 @@
 import { React, useState } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { AiFillCheckCircle } from 'react-icons/ai'
+import DefaultSearchMessage from './searchMessage/DefaultSearchMessage'
+import EmptySearchMessage from './searchMessage/EmptySearchMessage'
+
+// Test this .js's logic once ThreatReport.js is solved
 
 const ReportDisplay = (props) => {
-	const reportResult = props.report.id
+	const reportId = props.report.id
+	const reportHash = props.report.hash
+	const reportName = props.report.name
+	const reportThreatReport = props.report.threatReport
+	const hashLength = props.hashLength
+	console.log('From ReportDisplay.js, prop data : ' + props.report)
+	console.log('From ReportDisplay.js, id : ' + reportId)
 
-	console.log('From ReportDisplay.js, id : ' + reportResult)
-	const [displayDefaultMessage, displayNewMessage] = useState(true)
-
-	function DisplayResponse(props) {
-		if (!displayDefaultMessage) {
-			if (props.reportResult > 0) {
-				return <ValidResult reportData {...props} />
+	function DisplayResponse() {
+		if (hashLength > 0) {
+			if (reportId > 0) {
+				return <ValidResult />
 			} else {
-				return <NoResult />
+				return <EmptySearchMessage />
 			}
 		}
-		return <DefaultDisplay />
+		return <DefaultSearchMessage />
 	}
 
-	function ValidResult(reportData) {
+	function ValidResult(props) {
 		return (
 			<>
 				<h3>
-					A match with the hash ({reportData.report.hash}) was found
-					within within the database
-					<FaTimes
+					A match with the hash ({reportHash}) was found within within
+					the database
+					{/* <FaTimes
 						style={{
 							color: 'red',
 							height: '1.75em',
 							width: '1.75em',
 						}}
-					/>
+					/> */}
 				</h3>
-				<h3>The hash orignated from {reportData.report.name}</h3>
+				<h3>The hash orignated from {reportName}</h3>
 				<h3>Report :</h3>
-				<p>{reportData.report.threatReport}</p>
-			</>
-		)
-	}
-
-	function NoResult() {
-		return (
-			<>
-				<h3>
-					No matching hashes in the database was found
-					<AiFillCheckCircle
-						style={{
-							color: 'green',
-							height: '1.75em',
-							width: '1.75em',
-						}}
-					/>
-				</h3>
-			</>
-		)
-	}
-
-	function DefaultDisplay() {
-		return (
-			<>
-				<h3>
-					Search for malicious file hash by uploading file or
-					inputting file hash
-				</h3>
+				<p>{reportThreatReport}</p>
 			</>
 		)
 	}
 
 	return (
 		<div className="report">
-			<DisplayResponse
-				reportResult={reportResult}
-				props
-				{...props}
-				displayDefaultMessage={displayDefaultMessage}
-			/>
+			<DisplayResponse />
 		</div>
 	)
 }
